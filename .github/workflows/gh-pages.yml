@@ -18,34 +18,14 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Ensure dist/index.html
+      - name: Prepare demo page
         run: |
-          if [ ! -f ./dist/index.html ]; then
-            cat > ./dist/index.html <<'HTML'
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>ChatWidget Demo</title>
-  </head>
-  <body>
-    <div id="soulvex-chat"></div>
-    <script src="./bundle.js"></script>
-    <script>
-      if (window.SoulvexChatWidget && typeof SoulvexChatWidget.mount === 'function') {
-        SoulvexChatWidget.mount({ target: '#soulvex-chat' });
-      } else if (window.MyComponent && typeof window.MyComponent.default?.mount === 'function') {
-        window.MyComponent.default.mount({ target: '#soulvex-chat' });
-      } else if (window.MyComponent && typeof window.MyComponent.mount === 'function') {
-        window.MyComponent.mount({ target: '#soulvex-chat' });
-      } else {
-        console.warn('Chat widget mount function not found on window.');
-      }
-    </script>
-  </body>
-</html>
-HTML
+          mkdir -p dist
+          if [ -f demo.html ]; then
+            # Replace path to bundle.js so demo works from dist/
+            sed 's#src="dist/bundle.js"#src="./bundle.js"#' demo.html > dist/index.html
+          else
+            echo "demo.html not found; dist/index.html will not be created"
           fi
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
