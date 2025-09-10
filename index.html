@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ChatWidget Demo</title>
+  </head>
+  <body>
+    <div id="soulvex-chat"></div>
+    <script src="./bundle.js"></script>
+    <script>
+      if (window.SoulvexChatWidget && typeof SoulvexChatWidget.mount === 'function') {
+        SoulvexChatWidget.mount({ target: '#soulvex-chat' });
+      } else if (window.MyComponent && typeof window.MyComponent.default?.mount === 'function') {
+        window.MyComponent.default.mount({ target: '#soulvex-chat' });
+      } else if (window.MyComponent && typeof window.MyComponent.mount === 'function') {
+        window.MyComponent.mount({ target: '#soulvex-chat' });
+      } else {
+        console.warn('Chat widget mount function not found on window.');
+      }
+    </script>
+  </body>
+</html>
